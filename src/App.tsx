@@ -1,5 +1,6 @@
 import React from "react";
-import "./styles.css";
+import { api } from "./api";
+import "./styles.scss";
 
 export const App = () => {
   const [items, setItems] = React.useState([]);
@@ -19,8 +20,11 @@ export const App = () => {
       id: Date.now()
     };
 
-    setText("");
-    setItems(items.concat(newItem));
+    // *** NEW ***
+    api.createItem("/items", newItem).then((persistedItem) => {
+      setText("");
+      setItems(items.concat(persistedItem));
+    });
   };
 
   return (
@@ -37,7 +41,7 @@ export const App = () => {
         <label htmlFor="new-todo">What needs to be done?</label>
         <br />
         <input id="new-todo" value={text} onChange={handleChange} />
-        <button>Add #{items.length + 1}</button>
+        <button className="btn first">Add #{items.length + 1}</button>
       </form>
     </div>
   );
